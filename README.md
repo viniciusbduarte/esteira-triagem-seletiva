@@ -100,7 +100,7 @@ A Figura 1 apresenta o diagrama do circuito eletrônico do sistema, incluindo o 
 
 **Figura 1 – Diagrama do circuito eletrônico do sistema**
 
-![Diagrama do circuito](./images/circuito.png)
+![Diagrama do circuito](images/circuito.png)
 
 ---
 
@@ -110,11 +110,11 @@ A Figura 2 apresenta uma modelagem conceitual do sistema, representando a esteir
 
 **Figura 2 – Ilustração da esteira de triagem seletiva - Visão Frontal**
 
-![Modelagem da esteira](./images/modelagem_esteira.png)
+![Modelagem da esteira](images/modelagem_esteira.png)
 
 **Figura 3 – Ilustração da esteira de triagem seletiva - Visão Superior**
 
-![Modelagem da esteira](./images/modelagem_esteira1.png)
+![Modelagem da esteira](images/modelagem_esteira1.png)
 ---
 
 ## 8. Algoritmo de Medição de Distância
