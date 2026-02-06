@@ -108,10 +108,13 @@ A Figura 1 apresenta o diagrama do circuito eletrônico do sistema, incluindo o 
 
 A Figura 2 apresenta uma modelagem conceitual do sistema, representando a esteira, as caixas, o sensor ultrassônico e os mecanismos de desvio.
 
-**Figura 2 – Modelagem 3D da esteira de triagem seletiva**
+**Figura 2 – Ilustração da esteira de triagem seletiva - Visão Frontal**
 
-![Modelagem 3D da esteira](./images/modelagem_esteira.png)
+![Modelagem da esteira](./images/modelagem_esteira.png)
 
+**Figura 3 – Ilustração da esteira de triagem seletiva - Visão Superior**
+
+![Modelagem da esteira](./images/modelagem_esteira1.png)
 ---
 
 ## 8. Algoritmo de Medição de Distância
