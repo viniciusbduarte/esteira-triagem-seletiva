@@ -20,7 +20,9 @@
 
 #define LED_G_PIN  PB5
 #define LED_M_PIN  PB4
-#define LED_P_PIN  PB3
+#define LED_P_PIN  PB2
+
+#define PWM_PIN PB3   // OC2B
 
 #define DIG_PINS   ((1 << PC1) | (1 << PC2) | (1 << PC3) | (1 << PC4))
 #define DIG_MASK   ((1 << PC1) | (1 << PC2) | (1 << PC3) | (1 << PC4))
@@ -57,9 +59,11 @@ void hardware_init(void);
 void classificarCaixa(char categoria);
 ISR(TIMER0_OVF_vect);
 float readDistance(void);
+void setPWM(uint8_t duty);
 
 int main(void) {
 	hardware_init();
+	setPWM(100);
 	
 	while (1) {
 		
@@ -123,6 +127,13 @@ void hardware_init(void) {
 	TCNT0  = 0;
 	TIMSK0 = (1 << TOIE0);  // habilita interrupção overflow
 
+	// ===== Timer2 - PWM para controle da esteira (motor) =====
+	DDRB |= (1 << PWM_PIN); // PB3 (OC2A) como saída
+	TCCR2A = (1 << WGM20) | (1 << WGM21) | (1 << COM2A1); // OC2A
+	TCCR2B = (1 << CS21);  // prescaler = 8
+	OCR2A = 0; // PWM inicial = 0%
+
+	
 	// ===== Display 7 segmentos =====
 	DDRD = 0xFF;           // segmentos como saída (a-g + dp)
 	DDRC |= DIG_PINS;      // dígitos como saída (transistores)
@@ -131,6 +142,11 @@ void hardware_init(void) {
 	PORTC &= ~DIG_PINS;    // todos dígitos desligados
 
 	sei(); // habilita interrupções
+}
+
+void setPWM(uint8_t duty) {
+	if (duty > 100) duty = 100; // limita 0..100%
+	OCR2A = (uint8_t)((duty * 255) / 100);
 }
 
 void classificarCaixa(char c) {
