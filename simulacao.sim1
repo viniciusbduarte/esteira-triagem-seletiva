@@ -170,11 +170,11 @@
 
 <item itemtype="Tunnel" CircId="Tunnel-136" mainComp="false" Show_id="false" Show_Val="false" Pos="456,-624" rotation="0" hflip="-1" vflip="1" label="Tunnel-136" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="gnd" IsBus="false" />
 
-<item itemtype="Voltage Source" CircId="Voltage Source-148" mainComp="false" ShowProp="MaxValue" Show_id="false" Show_Val="true" Pos="112,-720" rotation="0" hflip="1" vflip="1" label="Voltage Source-148" idLabPos="-32,-48" labelrot="0" valLabPos="-8,30" valLabRot="0" Running="true" Value_Volt="2.195 V" MaxValue="5 V" MinValue="0 V" />
+<item itemtype="Voltage Source" CircId="Voltage Source-148" mainComp="false" ShowProp="MaxValue" Show_id="false" Show_Val="true" Pos="112,-720" rotation="0" hflip="1" vflip="1" label="Voltage Source-148" idLabPos="-32,-48" labelrot="0" valLabPos="-8,30" valLabRot="0" Running="true" Value_Volt="0.555 V" MaxValue="5 V" MinValue="0 V" />
 
 <item itemtype="DcMotor" CircId="DcMotor-151" mainComp="false" Show_id="true" Show_Val="false" Pos="572,-700" rotation="90" hflip="-1" vflip="1" label="DcMotor-151" idLabPos="-22,-48" labelrot="0" valLabPos="-14,36" valLabRot="0" RPM_Nominal="60 _RPM" Volt_Nominal="5 V" Resistance="100 Ω" />
 
-<item itemtype="Tunnel" CircId="Tunnel-154" mainComp="false" Show_id="false" Show_Val="false" Pos="552,-632" rotation="0" hflip="1" vflip="1" label="Tunnel-154" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="PWM" IsBus="false" />
+<item itemtype="Tunnel" CircId="Tunnel-154" mainComp="false" Show_id="false" Show_Val="false" Pos="548,-644" rotation="0" hflip="1" vflip="1" label="Tunnel-154" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="PWM" IsBus="false" />
 
 <item itemtype="Tunnel" CircId="Tunnel-155" mainComp="false" Show_id="false" Show_Val="false" Pos="572,-612" rotation="0" hflip="-1" vflip="1" label="Tunnel-155" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="gnd" IsBus="false" />
 
@@ -340,7 +340,7 @@
 
 <item itemtype="Connector" uid="Connector-145" startpinid="Tunnel-155-pin" endpinid="BJT-156-emiter" pointList="572,-612,572,-628" />
 
-<item itemtype="Connector" uid="Connector-146" startpinid="Tunnel-154-pin" endpinid="BJT-156-base" pointList="552,-632,552,-644,548,-644" />
+<item itemtype="Connector" uid="Connector-146" startpinid="Tunnel-154-pin" endpinid="BJT-156-base" pointList="548,-644,548,-644" />
 
 <item itemtype="Connector" uid="Connector-148" startpinid="DcMotor-151-rPin" endpinid="BJT-156-collector" pointList="572,-660,572,-660" />
 
