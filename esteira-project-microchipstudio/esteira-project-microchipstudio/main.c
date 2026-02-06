@@ -133,26 +133,28 @@ void hardware_init(void) {
 	sei(); // habilita interrupções
 }
 
-void classificarCaixa(char categoria){
-	if (categoria == 'G'){
+void classificarCaixa(char c) {
+	// apaga todos LEDs
+	PORTB &= ~((1 << LED_G_PIN) | (1 << LED_M_PIN) | (1 << LED_P_PIN));
+
+	switch (c) {
+		case 'G':
 		countG++;
-		PORTB &= ~(1 << PB5);
-		PORTB &= ~(1 << PB4);
-		PORTB |= (1 << PB3);
-	}
-	else if (categoria == 'M'){
+		PORTB |= (1 << LED_P_PIN);
+		break;
+
+		case 'M':
 		countM++;
-		PORTB &= ~(1 << PB5);
-		PORTB |= (1 << PB4);
-		PORTB &= ~(1 << PB3);
-	}
-	else if (categoria == 'P'){
+		PORTB |= (1 << LED_M_PIN);
+		break;
+
+		case 'P':
 		countP++;
-		PORTB |= (1 << PB5);
-		PORTB &= ~(1 << PB4);
-		PORTB &= ~(1 << PB3);
+		PORTB |= (1 << LED_G_PIN);
+		break;
 	}
 }
+
 
 ISR(TIMER0_OVF_vect) {
 
