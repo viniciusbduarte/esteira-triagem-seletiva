@@ -27,6 +27,15 @@
 #define DIG_PINS   ((1 << PC1) | (1 << PC2) | (1 << PC3) | (1 << PC4))
 #define DIG_MASK   ((1 << PC1) | (1 << PC2) | (1 << PC3) | (1 << PC4))
 
+// ===== Botões =====
+#define BTN_PAUSE_PIN   PC0
+#define BTN_RESUME_PIN  PC5
+#define BTN_PWM_UP_PIN  PB6
+#define BTN_PWM_DOWN_PIN PC6
+
+volatile bool sistemaAtivo = true;
+volatile uint8_t dutyPWM = 100;
+
 
 // ===== Definições dos segmentos para formar caracteres =====
 const uint8_t seg[13] = {
@@ -58,6 +67,8 @@ float distancia, ultimaDistancia;
 void hardware_init(void);
 void classificarCaixa(char categoria);
 ISR(TIMER0_OVF_vect);
+ISR(PCINT1_vect);
+ISR(PCINT0_vect);
 float readDistance(void);
 void setPWM(uint8_t duty);
 
@@ -66,9 +77,20 @@ int main(void) {
 	setPWM(100);
 	
 	while (1) {
-		
+
+		// ===== Controle geral do sistema (PAUSE / RESUME) =====
+		if (!sistemaAtivo) {
+			setPWM(0);       // para a esteira
+			continue;        // mantém display e interrupções funcionando
+		}
+		else {
+			setPWM(dutyPWM); // aplica duty atual
+		}
+
+		// ===== Leitura do sensor ultrassônico =====
 		distancia = readDistance();
 
+		// ===== Detecção de caixa =====
 		if (distancia < 450.0 && !caixaPresente) {
 			caixaPresente = true;
 
@@ -86,22 +108,23 @@ int main(void) {
 			}
 		}
 
+		// ===== Caixa saiu da área do sensor =====
 		if (distancia > 450.0) {
 			caixaPresente = false;
 		}
 
-		// ===== Atualiza display SEM travar =====
-
+		// ===== Atualização do display =====
 		valor[0] = categoria;
-		
-		if(categoria == 10) numero = countG;
-		if(categoria == 11) numero = countM;
-		if(categoria == 12) numero = countP;
+
+		if (categoria == 10) numero = countG;
+		if (categoria == 11) numero = countM;
+		if (categoria == 12) numero = countP;
 
 		valor[1] = (numero / 100) % 10;
 		valor[2] = (numero / 10) % 10;
 		valor[3] = numero % 10;
 	}
+
 }
 
 void hardware_init(void) {
@@ -140,6 +163,21 @@ void hardware_init(void) {
 
 	PORTD = 0x00;          // segmentos desligados
 	PORTC &= ~DIG_PINS;    // todos dígitos desligados
+
+	// ===== Botões (entrada com pull-up) =====
+	DDRC &= ~((1 << BTN_PAUSE_PIN) | (1 << BTN_RESUME_PIN) | (1 << BTN_PWM_DOWN_PIN));
+	PORTC |= (1 << BTN_PAUSE_PIN) | (1 << BTN_RESUME_PIN) | (1 << BTN_PWM_DOWN_PIN);
+
+	DDRB &= ~(1 << BTN_PWM_UP_PIN);
+	PORTB |= (1 << BTN_PWM_UP_PIN);
+
+	// ===== Interrupções por mudança de pino (PCINT) =====
+	PCICR |= (1 << PCIE0) | (1 << PCIE1);  // PORTB e PORTC
+
+	PCMSK0 |= (1 << PCINT6);              // PB6 (PWM +)
+	PCMSK1 |= (1 << PCINT8) | (1 << PCINT13) | (1 << PCINT14);
+	// PC0 (pause), PC5 (resume), PC6 (PWM -)
+
 
 	sei(); // habilita interrupções
 }
@@ -231,3 +269,33 @@ float readDistance(void) {
 	float time_us = ticks * 0.5f;
 	return (time_us * 0.0343f) / 2.0f;
 }
+
+
+ISR(PCINT1_vect) {
+
+	// ===== PAUSE =====
+	if (!(PINC & (1 << BTN_PAUSE_PIN))) {
+		sistemaAtivo = false;
+	}
+
+	// ===== RESUME =====
+	if (!(PINC & (1 << BTN_RESUME_PIN))) {
+		sistemaAtivo = true;
+	}
+
+	// ===== PWM - =====
+	if (!(PINC & (1 << BTN_PWM_DOWN_PIN))) {
+		if (dutyPWM >= 5) dutyPWM -= 5;
+		else dutyPWM = 0;
+		setPWM(dutyPWM);
+	}
+}
+
+// ===== Botão PWM + (PORTB) =====
+ISR(PCINT0_vect) {
+	if (!(PINB & (1 << BTN_PWM_UP_PIN))) {
+		if (dutyPWM < 100) dutyPWM += 5;
+		setPWM(dutyPWM);
+	}
+}
+
